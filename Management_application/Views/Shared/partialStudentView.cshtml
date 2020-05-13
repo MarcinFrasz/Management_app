@@ -1,0 +1,176 @@
+﻿@model  Management_application.Models.Student_View
+
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#active" data-toggle="tab" aria-expanded="true">Aktywne zajęcia</a></li>
+    <li class=""><a href="#not_active" data-toggle="tab" aria-expanded="false">Zakończone zajęcia</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="active">
+        <h2> Aktualne zajęcia:</h2>
+        <div style="overflow:scroll; height:500px;">
+
+            <table class="table table-striped table-hover ">
+                @for (int i = 0; i < Model.Classes_list.Count; i++)
+                {
+                    switch (Model.Classes_list[i].Type)
+                    {
+                        case "Laboratorium":
+                            <thead>
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Typ</th>
+                                    <th>Rok</th>
+                                    <th>Semestr</th>
+                                    <th>Prowadzący</th>
+                                    <th>Ocena[1]</th>
+                                    <th>Ocena[2]</th>
+                                    <th>Ocena[3]</th>
+                                    <th>Ocena[4]</th>
+                                    <th>Ocena[5]</th>
+                                    <th>Ocena[6]</th>
+                                    <th>Ocena[7]</th>
+                                    <th>Ocena[8]</th>
+                                    <th>Ocena[9]</th>
+                                    <th>Ocena[10]</th>
+                                    <th>Ocena[11]</th>
+                                    <th>Ocena[12]</th>
+                                    <th>Ocena[13]</th>
+                                    <th>Ocena[14]</th>
+                                    <th>Ocena[15]</th>
+                                    <th>Ocena końcowa</th>
+                                </tr>
+                            </thead>
+                            <tr class="active">
+                                <td>@Model.Classes_list[i].Name</td>
+                                <td>@Model.Classes_list[i].Type</td>
+                                <td>@Model.Classes_list[i].Year</td>
+                                <td>@Model.Classes_list[i].Semester</td>
+                                <td>@Model.Classes_list[i].Leader_name_surname</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_1</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_2</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_3</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_4</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_5</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_6</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_7</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_8</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_9</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_10</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_11</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_12</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_13</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_14</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_15</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_final</td>
+                            </tr>
+                            break;
+                        default:
+                            <thead>
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Typ</th>
+                                    <th>Rok</th>
+                                    <th>Semestr</th>
+                                    <th>Prowadzący</th>
+                                    <th>Ocena końcowa</th>
+                                </tr>
+                            </thead>
+                            <tr class="active">
+                                <td>@Model.Classes_list[i].Name</td>
+                                <td>@Model.Classes_list[i].Type</td>
+                                <td>@Model.Classes_list[i].Year</td>
+                                <td>@Model.Classes_list[i].Semester</td>
+                                <td>@Model.Classes_list[i].Leader_name_surname</td>
+                                <td>@Model.Classes_list[i].Grades_list.Grade_final</td>
+                            </tr>
+                            break;
+                    }
+                }
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="not_active">
+        <h2>Zakończone zajęcia:</h2>
+        <div id="div2" style="overflow:scroll; height:500px;">
+            <table class="table table-striped table-hover ">
+                @for (int i = 0; i < Model.Classes_list_closed.Count; i++)
+                {
+                    switch (Model.Classes_list_closed[i].Type)
+                    {
+                        case "Laboratorium":
+                            <thead>
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Typ</th>
+                                    <th>Rok</th>
+                                    <th>Semestr</th>
+                                    <th>Prowadzący</th>
+                                    <th>Ocena[1]</th>
+                                    <th>Ocena[2]</th>
+                                    <th>Ocena[3]</th>
+                                    <th>Ocena[4]</th>
+                                    <th>Ocena[5]</th>
+                                    <th>Ocena[6]</th>
+                                    <th>Ocena[7]</th>
+                                    <th>Ocena[8]</th>
+                                    <th>Ocena[9]</th>
+                                    <th>Ocena[10]</th>
+                                    <th>Ocena[11]</th>
+                                    <th>Ocena[12]</th>
+                                    <th>Ocena[13]</th>
+                                    <th>Ocena[14]</th>
+                                    <th>Ocena[15]</th>
+                                    <th>Ocena końcowa</th>
+                                </tr>
+                            </thead>
+                            <tr class="active">
+                                <td>@Model.Classes_list_closed[i].Name</td>
+                                <td>@Model.Classes_list_closed[i].Type</td>
+                                <td>@Model.Classes_list_closed[i].Year</td>
+                                <td>@Model.Classes_list_closed[i].Semester</td>
+                                <td>@Model.Classes_list_closed[i].Leader_name_surname</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_1</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_2</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_3</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_4</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_5</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_6</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_7</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_8</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_9</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_10</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_11</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_12</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_13</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_14</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_15</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_final</td>
+                            </tr>
+                            break;
+                        default:
+                            <thead>
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Typ</th>
+                                    <th>Rok</th>
+                                    <th>Semestr</th>
+                                    <th>Prowadzący</th>
+                                    <th>Ocena końcowa</th>
+
+                                </tr>
+                            </thead>
+                            <tr class="active">
+                                <td>@Model.Classes_list_closed[i].Name</td>
+                                <td>@Model.Classes_list_closed[i].Type</td>
+                                <td>@Model.Classes_list_closed[i].Year</td>
+                                <td>@Model.Classes_list_closed[i].Semester</td>
+                                <td>@Model.Classes_list_closed[i].Leader_name_surname</td>
+                                <td>@Model.Classes_list_closed[i].Grades_list.Grade_final</td>
+                            </tr>
+                            break;
+                    }
+                }
+            </table>
+        </div>
+    </div>

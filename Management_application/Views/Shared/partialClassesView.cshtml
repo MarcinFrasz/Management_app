@@ -1,0 +1,24 @@
+﻿@model  Management_application.Models.Classes
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>Nazwa przedmiotu</th>
+                <th>Typ zajęć</th>
+                <th>Rok</th>
+                <th>Semestr</th>
+            </tr>
+            </thead>
+            <tr class="active">
+                @Html.HiddenFor(m => m.Class_id)
+                @Html.HiddenFor(m => m.Leader_id)
+                <td>@Model.Name</td>
+                @Html.HiddenFor(m => m.Name)
+                <td>@Model.Type</td>
+                @Html.HiddenFor(m => m.Type)
+                <td>@Model.Year</td>
+                @Html.HiddenFor(m => m.Year)
+                <td>@Model.Semester</td>
+                @Html.HiddenFor(m => m.Semester)
+            </tr>
+    </table>
+

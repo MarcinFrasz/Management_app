@@ -1,0 +1,135 @@
+﻿@model  Management_application.Models.Add_Grades_View
+@{
+    List<string> grade_type_list = new List<string>();
+    grade_type_list = ViewBag.grade_dropdown;
+}
+<link href="~/Content/CustomStyle.css" rel="stylesheet" type="text/css" />
+<h3>Nazwa przedmiotu: @Model.Name   Typ: @Model.Type</h3>
+<h3>Rok: @Model.Year    Semestr: @Model.Semester</h3>
+@switch (Model.Type)
+{
+    case "Laboratorium":
+        using (Html.BeginForm("AddGradesView", "ManagementApp", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Class_id);
+            @Html.HiddenFor(m => m.Type);
+            @Html.HiddenFor(m => m.Name);
+            @Html.HiddenFor(m => m.Semester);
+            @Html.HiddenFor(m => m.Year);
+            @Html.HiddenFor(m => m.Leader_id);
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th>Numer indeksu</th>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Ocena [1]</th>
+                        <th>Ocena [2]</th>
+                        <th>Ocena [3]</th>
+                        <th>Ocena [4]</th>
+                        <th>Ocena [5]</th>
+                        <th>Ocena [6]</th>
+                        <th>Ocena [7]</th>
+                        <th>Ocena [8]</th>
+                        <th>Ocena [9]</th>
+                        <th>Ocena [10]</th>
+                        <th>Ocena [11]</th>
+                        <th>Ocena [12]</th>
+                        <th>Ocena [13]</th>
+                        <th>Ocena [14]</th>
+                        <th>Ocena [15]</th>
+                        <th>Ocena końcowa</th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < Model.Students_list.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.Students_list[i].Id)
+                    @Html.HiddenFor(m => m.Students_list[i].Name)
+                    @Html.HiddenFor(m => m.Students_list[i].Surname)
+                    @Html.HiddenFor(m => m.Students_list[i].Index_number)
+                    <tr class="active">
+                        <td>@Model.Students_list[i].Index_number</td>
+                        <td>@Model.Students_list[i].Name</td>
+                        <td>@Model.Students_list[i].Surname</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_1, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_1), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_2, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_2), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_3, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_3), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_4, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_4), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_5, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_5), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_6, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_6), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_7, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_7), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_8, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_8), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_9, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_9), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_10, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_10), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_11, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_11), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_12, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_12), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_13, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_13), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_14, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_14), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_15, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_15), "", new { @class = "form-control" })</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_final, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_final), "", new { @class = "form-control" })</td>
+                    </tr>
+                }
+            </table>
+            <input class="btn btn-primary" type="submit" name="submit" value="Zatwierdz" />
+            <br />
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Uwaga!</h4>
+                <p>Wciśnięcie przycisku Zamknij przedmiot zakończ zajęcia zakończy wybrany przedmiot i uniemożliwi dalsze zarządzanie nim!</p>
+            </div>
+            <input class="btn btn-primary" type="submit" name="submit" value="Zamknij przedmiot" />
+        }
+        break;
+    default:
+        using (Html.BeginForm("AddGradesView", "ManagementApp", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Class_id);
+            @Html.HiddenFor(m => m.Type);
+            @Html.HiddenFor(m => m.Name);
+            @Html.HiddenFor(m => m.Semester);
+            @Html.HiddenFor(m => m.Year);
+            @Html.HiddenFor(m => m.Leader_id);
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th>Numer indeksu</th>
+                        <th>Imie</th>
+                        <th>Nazwisko</th>
+                        <th>Ocena</th>
+                    </tr>
+                </thead>
+                @for (int i = 0; i < Model.Students_list.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.Students_list[i].Id)
+                    @Html.HiddenFor(m => m.Students_list[i].Name)
+                    @Html.HiddenFor(m => m.Students_list[i].Surname)
+                    @Html.HiddenFor(m => m.Students_list[i].Index_number)
+                    <tr class="active">
+                        <td>@Model.Students_list[i].Index_number</td>
+                        <td>@Model.Students_list[i].Name</td>
+                        <td>@Model.Students_list[i].Surname</td>
+                        <td>@Html.DropDownListFor(m => m.Students_list[i].Grades_list.Grade_final, new SelectList(grade_type_list, Model.Students_list[i].Grades_list.Grade_final), "", new { @class = "form-control" })</td>
+                    </tr>
+
+                }
+            </table>
+            <br />
+            <div style="text-align:left; width:50%;float:left">
+                <input class="btn btn-primary" type="submit" name="submit" value="Zatwierdz" />
+            </div>
+            <div style="text-align:right; width:50%; float:right">
+                <input class="btn btn-primary" type="submit" name="submit" value="Zamknij przedmiot" />
+            </div>
+            <br />
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Uwaga!</h4>
+                <p>Wciśnięcie przycisku Zamknij przedmiot zakończ zajęcia zakończy wybrany przedmiot i uniemożliwi dalsze zarządzanie nim!</p>
+            </div>
+        }
+        break;
+}
+
+

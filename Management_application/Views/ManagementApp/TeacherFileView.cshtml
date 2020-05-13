@@ -1,0 +1,67 @@
+﻿@model  Management_application.Models.File_View
+@{
+    ViewBag.Title = "TeacherFileView";
+    var class_names_list = ViewBag.class_names_list;
+}
+<h3>Wybierz zajeciącia</h3>
+@Html.DropDownListFor(m => m.Folder_name, new SelectList(class_names_list), "--Wybierz--", new { @class = "form-control", onchange = "OnchangeEventClass()" })
+<br />
+@if (Model.Directory_list != null)
+{
+    <h3>Wybierz folder</h3>
+    @Html.DropDownListFor(m => m.Directory_name, new SelectList(Model.Directory_list), "--Wybierz--", new { @class = "form-control", onchange = "OnchangeEvent()" })
+
+    <br />
+    <div id="reloadPartial">
+        @Html.Partial("~/Views/Shared/partialFileView.cshtml", Model)
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+
+
+
+        function OnchangeEventClass() {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/ManagementApp/Select_ClassDir_Teacher",
+                    data: JSON.stringify({ 'class_name': $('#Folder_name').val() }),
+                    contentType: 'application/json',
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#Directory_name').html('');
+                            var options = '';
+                            options += '<option value="Wybierz">Wybierz</option>';
+                            for (var i = 0; i < response.length; i++) {
+                                options += '<option value="' + response[i] + '">' + response[i] + '</option>';
+                            }
+                            $('#Directory_name').append(options);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            });
+        };
+        function OnchangeEvent() {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/ManagementApp/Select_ClassFiles_Teacher",
+                    data: JSON.stringify({ 'class_name': $('#Folder_name').val(),'directory_NAME': $('#Directory_name').val()}),
+                    contentType: 'application/json',
+                    dataType: "html",
+                    success: function (result) {
+                        $('#reloadPartial').html(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            });
+        };
+    </script>
+}

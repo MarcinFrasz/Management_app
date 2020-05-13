@@ -1,0 +1,88 @@
+﻿@model  Management_application.Models.Manage_class_view
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#attending" data-toggle="tab" aria-expanded="true">Zapisani studenci</a></li>
+    <li class=""><a href="#not_attending" data-toggle="tab" aria-expanded="false">Niezapisani studenci</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="attending">
+        <h2>Zapisani studenci:</h2>
+        @using (Html.BeginForm("ManageClassView", "ManagementApp", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div id="" style="overflow:scroll; height:300px;">
+                @Html.HiddenFor(m => m.Class_id)
+                @Html.HiddenFor(m => m.Type)
+                @Html.HiddenFor(m => m.Year)
+                @Html.HiddenFor(m => m.Semester)
+                @Html.HiddenFor(m => m.Name)
+                @Html.HiddenFor(m => m.Leader_id)
+                <table class="table table-striped table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Numer indeksu</th>
+                        </tr>
+                        @for (int i = 0; i < Model.Attending_students_list.Count; i++)
+                        {
+                            <tr class="active">
+                                @Html.HiddenFor(m => m.Attending_students_list[i].Id)
+                                @Html.HiddenFor(m => m.Attending_students_list[i].Name)
+                                @Html.HiddenFor(m => m.Attending_students_list[i].Surname)
+                                @Html.HiddenFor(m => m.Attending_students_list[i].Index_number)
+                                <td>@Model.Attending_students_list[i].Email</td>
+                                <td>@Model.Attending_students_list[i].Name</td>
+                                <td>@Model.Attending_students_list[i].Surname</td>
+                                <td>@Model.Attending_students_list[i].Index_number</td>
+                                <td>@Html.CheckBoxFor(m => m.Attending_students_list[i].Addremove_student_check)</td>
+                            </tr>
+                        }
+                </table>
+            </div>
+
+            <input class="btn btn-primary" type="submit" name="submit" value="Usuń studentów" />
+        }
+    </div>
+    <div class="tab-pane fade" id="not_attending">
+        <h2>Niezapisani studenci:</h2>
+        @using (Html.BeginForm("ManageClassView", "ManagementApp", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div id="" style="overflow:scroll; height:300px;">
+                @Html.HiddenFor(m => m.Class_id)
+                @Html.HiddenFor(m => m.Type)
+                @Html.HiddenFor(m => m.Year)
+                @Html.HiddenFor(m => m.Semester)
+                @Html.HiddenFor(m => m.Name)
+                @Html.HiddenFor(m => m.Leader_id)
+                <table class="table table-striped table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Numer indeksu</th>
+                        </tr>
+                    </thead>
+                    @for (int i = 0; i < Model.Not_attending_students_list.Count; i++)
+                    {
+                        <tr class="active">
+                            @Html.HiddenFor(m => m.Not_attending_students_list[i].Id)
+                            @Html.HiddenFor(m => m.Not_attending_students_list[i].Name)
+                            @Html.HiddenFor(m => m.Not_attending_students_list[i].Surname)
+                            @Html.HiddenFor(m => m.Not_attending_students_list[i].Index_number)
+                            <td>@Model.Not_attending_students_list[i].Email</td>
+                            <td>@Model.Not_attending_students_list[i].Name</td>
+                            <td>@Model.Not_attending_students_list[i].Surname</td>
+                            <td>@Model.Not_attending_students_list[i].Index_number</td>
+                            <td>@Html.CheckBoxFor(m => m.Not_attending_students_list[i].Addremove_student_check)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <input class="btn btn-primary" type="submit" name="submit" value="Dodaj studentów" />
+        }
+    </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@model  Management_application.Models.Report
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+@if (User.IsInRole("leader"))
+{
+    <div class="jumbotron">
+        <h1>Witaj nauczycielu!</h1>
+    </div>
+}
+else
+{
+    if (User.IsInRole("student"))
+    {
+        <div class="jumbotron">
+            <h1>Witaj studencie!</h1>
+        </div>
+    }
+    else
+    {
+        if (User.IsInRole("admin"))
+        {
+            <div class="jumbotron">
+                <h1>Witaj administratorze!</h1>
+            </div>
+        }
+        else
+        {
+            <div class="jumbotron">
+                <h1>Witaj użytkowniku!</h1>
+                <p>Posiadasz już konto? Zaloguj się...</p>
+                <input type="button" class="btn btn-primary btn-lg" value="Zaloguj się" onclick="@("window.location.href='" + @Url.Action("Login", "Account") + "'");" />
+                <p>Nie posiadasz konta? Zarejestruj się już teraz...</p>
+                <input type="button" class="btn btn-primary btn-lg" value="Rejestracja" onclick="@("window.location.href='" + @Url.Action("Register", "Account") + "'");" />
+            </div>
+
+        }
+    }
+}
+

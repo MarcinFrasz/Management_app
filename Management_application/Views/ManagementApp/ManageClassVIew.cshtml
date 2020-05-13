@@ -1,0 +1,209 @@
+﻿@model  Management_application.Models.Manage_class_view
+
+<link href="~/Content/CustomStyle.css" rel="stylesheet" type="text/css" />
+<div class="row">
+    <div class="column">
+        @{
+            ViewBag.Title = "ManageClassView";
+            string current_year = DateTime.Now.Year.ToString();
+            int year = Int32.Parse(current_year);
+            string year_beafore = (year - 1).ToString();
+            string year_after = (year + 1).ToString();
+
+            var years_list = new List<string>();
+            years_list.Add(year_beafore + "/" + current_year);
+            years_list.Add(current_year + "/" + year_after);
+
+            var column_list = new List<string>();
+            column_list.Add("Imię");
+            column_list.Add("Nazwisko");
+            column_list.Add("Email");
+            column_list.Add("Numer indeksu");
+            var order_list = new List<string>();
+            order_list.Add("ASC");
+            order_list.Add("DESC");
+
+            var semester_list = new List<string>();
+            semester_list.Add("Letni");
+            semester_list.Add("Zimowy");
+            List<String> classtype_list = new List<string>();
+            classtype_list = ViewBag.classtype_dropdown;
+        }
+
+        <h2>Edytuj zajęcia: @Model.Name</h2>
+
+
+        @using (Html.BeginForm("ManageClassView", "ManagementApp", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Class_id)
+            Model.Type_change_check = Model.Type;
+            @Html.HiddenFor(m => m.Type_change_check)
+            for (int i = 0; i < Model.Attending_students_list.Count; i++)
+            {
+                @Html.HiddenFor(m => m.Attending_students_list[i].Id)
+                @Html.HiddenFor(m => m.Attending_students_list[i].Name)
+                @Html.HiddenFor(m => m.Attending_students_list[i].Surname)
+                @Html.HiddenFor(m => m.Attending_students_list[i].Email)
+                @Html.HiddenFor(m => m.Attending_students_list[i].Index_number)
+            }
+            for (int i = 0; i < Model.Not_attending_students_list.Count; i++)
+            {
+                @Html.HiddenFor(m => m.Not_attending_students_list[i].Id)
+                @Html.HiddenFor(m => m.Not_attending_students_list[i].Name)
+                @Html.HiddenFor(m => m.Not_attending_students_list[i].Surname)
+                @Html.HiddenFor(m => m.Not_attending_students_list[i].Email)
+                @Html.HiddenFor(m => m.Not_attending_students_list[i].Index_number)
+            }
+
+            <table>
+                <tr>
+                    @Html.HiddenFor(m => m.Leader_id)
+                    <td>Nazwa zajęć:</td>
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <td>@Html.TextAreaFor(m => m.Name, new { @class = "form-control", placeholder = "", required = "required" })</td>
+                </tr>
+                <tr>
+                    <td>Typ zajęć:</td>
+                    <td>
+                        @Html.DropDownListFor(m => m.Type, new SelectList(classtype_list), "--Wybierz--", new { @class = "form-control", required = "required" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>Rok:</td>
+                    <td>
+                        @Html.DropDownListFor(m => m.Year, new SelectList(years_list), "--Wybierz--", new { @class = "form-control", required = "required" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>Semestr:</td>
+                    <td>@Html.DropDownListFor(m => m.Semester, new SelectList(semester_list), "--Wybierz--", new { @class = "form-control", required = "required" })</td>
+
+                </tr>
+                <tr>
+                    <td>Zakończ zajęcia:</td>
+                    <td>@Html.CheckBoxFor(m => m.Class_closed)</td>
+                </tr>
+                <tr>
+                    <td align="center"><input class="btn btn-primary" type="submit" name="submit" value="Zapisz zmiany" /></td>
+                </tr>
+            </table>
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Uwaga!</h4>
+                <p>Zaznaczenie pozycji zakończ zajęcia zakończy wybrany przedmiot i uniemożliwi zarządzanie nim!</p>
+            </div>
+        }
+        <br />
+    </div>
+    <div class="column">
+        <h3>Sortowanie:</h3>
+        @Html.DropDownList("Sort", new SelectList(column_list), "--Wybierz--", new { @class = "form-control", onchange = "OnchangeEvent()", style = "display: inline; width:250px;" })
+        @Html.DropDownList("Sort_type", new SelectList(order_list), new { @class = "form-control", onchange = "OnchangeEvent()", style = "display: inline; width:100px;" })
+        <br /><br />
+
+        @Html.Label("Szukaj:")
+        @Html.TextBox("Search", "", new { @class = "form-control", placeholder = "", style = "width:250px; display: inline;" })
+        @Html.DropDownList("Search_column", new SelectList(column_list), new { @class = "form-control", style = "width:150px; display: inline;" })
+        <br />
+        <input type="button" onclick="SearchEvent()" value="Szukaj" class="btn btn-primary"/>
+        <div id="reloadPartial">
+            @Html.Partial("~/Views/Shared/partialManageClassView.cshtml", Model)
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ViewBagMsg))
+{
+    <script type="text/javascript">
+alert("@Model.ViewBagMsg");
+    </script>
+}
+
+
+@section scripts{
+    <script type="text/javascript">
+        function OnchangeEvent() {
+            $(document).ready(function () {
+                      var model = {
+                    Class_id:"@Model.Class_id",
+                    Type: "@Model.Type",
+                    Name: "@Model.Name",
+                    Type_change_check:"@Model.Type_change_check",
+                    Leader_id:"@Model.Leader_id",
+                    Year:"@Model.Year",
+                    Semester:"@Model.Semester",
+                    User_id:"@Model.User_id",
+                    Not_attending_students_list: [
+                               @foreach(var item in Model.Not_attending_students_list)
+                               {
+                                  <text> { Id:"@item.Id",Email:"@item.Email",Name:"@item.Name",Surname:"@item.Surname",Index_number:"@item.Index_number",Type:"@item.Type",addremove_student_check:"@item.Addremove_student_check"},</text>
+                               }
+
+                          ],
+                    Attending_students_list: [
+                               @foreach(var item in Model.Attending_students_list)
+                               {
+                                  <text> { Id:"@item.Id",Email:"@item.Email",Name:"@item.Name",Surname:"@item.Surname",Index_number:"@item.Index_number",Type:"@item.Type",addremove_student_check:"@item.Addremove_student_check"},</text>
+                               }
+
+                          ],
+            };
+                $.ajax({
+                    type: "POST",
+                    url: "/ManagementApp/Sort_students",
+                    data: JSON.stringify({ 'model': model,'sort':$('#Sort').val(),'sort_type':$('#Sort_type').val() }),
+                    contentType:'application/json',
+                    dataType: "html",
+                    success: function (result) {
+                        $('#reloadPartial').html(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                    }
+                });
+            });
+        };
+                function SearchEvent() {
+            $(document).ready(function () {
+                      var model = {
+                    Class_id: "@Model.Class_id",
+                    Name:"@Model.Name",
+                    Type:"@Model.Type",
+                    Type_change_check:"@Model.Type_change_check",
+                    Leader_id:"@Model.Leader_id",
+                    Year:"@Model.Year",
+                    Semester:"@Model.Semester",
+                    User_id:"@Model.User_id",
+                    Not_attending_students_list: [
+                               @foreach(var item in Model.Not_attending_students_list)
+                               {
+                                  <text> { Id:"@item.Id",Email:"@item.Email",Name:"@item.Name",Surname:"@item.Surname",Index_number:"@item.Index_number",Type:"@item.Type",addremove_student_check:"@item.Addremove_student_check"},</text>
+                               }
+
+                          ],
+                    Attending_students_list: [
+                               @foreach(var item in Model.Attending_students_list)
+                               {
+                                  <text> { Id:"@item.Id",Email:"@item.Email",Name:"@item.Name",Surname:"@item.Surname",Index_number:"@item.Index_number",Type:"@item.Type",addremove_student_check:"@item.Addremove_student_check"},</text>
+                               }
+
+                          ],
+            };
+                $.ajax({
+                    type: "POST",
+                    url: "/ManagementApp/Search_student",
+                    data: JSON.stringify({ 'model': model,'search_column':$('#Search_column').val(),'search':$('#Search').val() }),
+                    contentType:'application/json',
+                    dataType: "html",
+                    success: function (result) {
+                        $('#reloadPartial').html(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                    }
+                });
+            });
+            };
+    </script>
+}

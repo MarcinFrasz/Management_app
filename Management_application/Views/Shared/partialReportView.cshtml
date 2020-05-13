@@ -1,0 +1,76 @@
+﻿@model  Management_application.Models.Report
+<link href="~/Content/CustomStyle.css" rel="stylesheet" type="text/css" />
+@if (Model.Classes_list.Count != 0)
+{
+    using (Html.BeginForm("ReportView", "ManagementApp", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.Year_start)
+        @Html.HiddenFor(m => m.Year_end)
+        <input class="btn btn-primary" type="submit" name="submit" value="Pobierz pdf" />
+    }
+}
+@for (int i = 0; i < Model.Classes_list.Count; i++)
+{
+    <h3>
+        Przedmiot: @Model.Classes_list[i].Name Typ: @Model.Classes_list[i].Type  Prowadzący: @Model.Name  @Model.Surname<br />
+        Rok: @Model.Classes_list[i].Year Semestr: @Model.Classes_list[i].Semester
+    </h3>
+    if (Model.Classes_list[i].Type == "Laboratorium")
+    {
+        <table class="raport">
+            <thead>
+                <tr>
+                    <th>Indeks</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Ocena[1]</th>
+                    <th>Ocena[2]</th>
+                    <th>Ocena[3]</th>
+                    <th>Ocena[4]</th>
+                    <th>Ocena[5]</th>
+                    <th>Ocena[6]</th>
+                    <th>Ocena[7]</th>
+                    <th>Ocena[8]</th>
+                    <th>Ocena[9]</th>
+                    <th>Ocena[10]</th>
+                    <th>Ocena[11]</th>
+                    <th>Ocena[12]</th>
+                    <th>Ocena[13]</th>
+                    <th>Ocena[14]</th>
+                    <th>Ocena[15]</th>
+                    <th>Ocena końcowa</th>
+                </tr>
+                @for (int j = 0; j < Model.Classes_list[i].Students_list.Count; j++)
+                {
+                    <tr>
+                        <td>@Model.Classes_list[i].Students_list[j].Index_number</td>
+                        <td>@Model.Classes_list[i].Students_list[j].Name</td>
+                        <td>@Model.Classes_list[i].Students_list[j].Surname</td>
+
+                        <td>@Model.Classes_list[i].Students_list[j].Grades_list.Grade_final</td>
+                    </tr>
+                }
+        </table>
+    }
+    else
+    {
+        <table class="raport">
+            <tr>
+                <td>Indeks</td>
+                <td>Imię</td>
+                <td>Nazwisko</td>
+                <td>Ocena końcowa</td>
+            </tr>
+            @for (int j = 0; j < Model.Classes_list[i].Students_list.Count; j++)
+            {
+                <tr>
+                    <td>@Model.Classes_list[i].Students_list[j].Index_number</td>
+                    <td>@Model.Classes_list[i].Students_list[j].Name</td>
+                    <td>@Model.Classes_list[i].Students_list[j].Surname</td>
+                    <td>@Model.Classes_list[i].Students_list[j].Grades_list.Grade_final</td>
+                </tr>
+            }
+        </table>
+    }
+    <text>Folder przedmiotu: @Model.Classes_list[i].Class_id @Model.Classes_list[i].Name @Model.Classes_list[i].Type @Model.Classes_list[i].Year.Replace('/', '-') @Model.Classes_list[i].Semester @Model.Name  @Model.Surname</text>
+}

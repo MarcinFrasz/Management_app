@@ -1,0 +1,36 @@
+﻿@model  Management_application.Models.File_View
+@{
+    ViewBag.Title = "StudentFileView";
+    var class_names_list = ViewBag.class_names_list;
+}
+<h3>Wybierz zajeciącia</h3>
+@Html.DropDownListFor(m=>m.Folder_name, new SelectList(class_names_list), "--Wybierz--", new { @class = "form-control", onchange = "OnchangeEvent()" })
+<br />
+@Html.Label("Szukaj:")
+@Html.TextBox("Search", "", new { @class = "form-control", placeholder = "", style = "width:250px; display: inline;" })
+<br />
+<div id="reloadPartial">
+    @Html.Partial("~/Views/Shared/partialFileView.cshtml", Model)
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function OnchangeEvent() {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/ManagementApp/Select_ClassFiles_Student",
+                    data: JSON.stringify({ 'class_name': $('#Folder_name').val(), 'search': $('#Search').val() }),
+                    contentType: 'application/json',
+                    dataType: "html",
+                    success: function (result) {
+                        $('#reloadPartial').html(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            });
+        };
+    </script>
+}
+

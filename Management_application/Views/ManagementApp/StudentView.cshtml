@@ -1,0 +1,50 @@
+﻿@model  Management_application.Models.Student_View
+@{
+    ViewBag.Title = "StudentView";
+    var column_list = new List<string>();
+    column_list.Add("Nazwa");
+    column_list.Add("Typ");
+    column_list.Add("Rok");
+    column_list.Add("Semestr");
+    column_list.Add("Prowadzący");
+    var order_list = new List<string>();
+    order_list.Add("ASC");
+    order_list.Add("DESC");
+}
+
+
+    <h2>Zajęcia</h2>
+    <h3>Sortowanie:</h3>
+    @Html.DropDownList("Sort", new SelectList(column_list), "--Wybierz--", new { @class = "form-control", onchange = "SearchEvent()", style = "display: inline; width:250px;" })
+    @Html.DropDownList("Sort_type", new SelectList(order_list), new { @class = "form-control", onchange = "SearchEvent()", style = "display: inline; width:100px;" })
+    <br />
+    @Html.Label("Szukaj:")
+    @Html.TextBox("Search", "", new { @class = "form-control", placeholder = "", style = "width:250px; display: inline;" })
+    @Html.DropDownList("Search_column", new SelectList(column_list), new { @class = "form-control", style = "width:150px; display: inline;" })
+    <br />
+    <input type="button" onclick="SearchEvent()" value="Szukaj" class="btn btn-primary" />
+
+    <div id="reloadPartial">
+        @Html.Partial("~/Views/Shared/partialStudentView.cshtml", Model);
+    </div>
+    @section scripts{
+        <script type="text/javascript">
+            function SearchEvent() {
+                $(document).ready(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/ManagementApp/partial_StudentView",
+                        data: JSON.stringify({ 'search_column': $('#Search_column').val(), 'search': $('#Search').val(), 'sort': $('#Sort').val(), 'sort_type': $('#Sort_type').val() }),
+                        contentType: 'application/json',
+                        dataType: "html",
+                        success: function (result) {
+                            $('#reloadPartial').html(result);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                });
+            };
+        </script>
+    }

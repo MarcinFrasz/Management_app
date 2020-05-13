@@ -1,0 +1,33 @@
+﻿.scrollable {
+    height: 100px;
+    overflow-y: auto;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+table.raport {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+ table.raport th,table.raport td {
+    text-align: left;
+    padding: 8px;
+}
+
+table.raport tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+

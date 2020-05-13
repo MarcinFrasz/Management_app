@@ -1,0 +1,50 @@
+﻿@model  Management_application.Models.Add_Grades_View
+@{
+    ViewBag.Title = "AddGradesView";
+    var class_names_list = ViewBag.class_names_list;
+    var column_list = new List<string>();
+    column_list.Add("Imię");
+    column_list.Add("Nazwisko");
+    column_list.Add("Numer indeksu");
+    var order_list = new List<string>();
+    order_list.Add("ASC");
+    order_list.Add("DESC");
+
+}
+<h3>Wybierz zajeciącia</h3>
+@Html.DropDownList("class_name", new SelectList(class_names_list), "--Wybierz--", new { @class = "form-control", onchange = "OnchangeEvent()" })
+<h3>Sortowanie:</h3>
+@Html.DropDownList("Sort", new SelectList(column_list), "--Wybierz--", new { @class = "form-control", onchange = "OnchangeEvent()", style = "display: inline; width:250px;" })
+@Html.DropDownList("Sort_type", new SelectList(order_list), new { @class = "form-control",onchange = "OnchangeEvent()", style = "display: inline; width:100px;" })
+<br />
+@Html.Label("Szukaj:")
+@Html.TextBox("Search", "", new { @class = "form-control", placeholder = "", style = "width:250px; display: inline;" })
+@Html.DropDownList("Search_column", new SelectList(column_list), new { @class = "form-control", style = "width:150px; display: inline;" })
+<br />
+<input type="button" onclick="OnchangeEvent()" value="Szukaj" class="btn btn-primary" />
+<div id="reloadPartial">
+    @Html.Partial("~/Views/Shared/partialAddGradesView.cshtml", Model)
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function OnchangeEvent() {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/ManagementApp/Select_class_AddGrades",
+                    data: JSON.stringify({ 'class_name':$('#class_name').val(),'search_column':$('#Search_column').val(),'search':$('#Search').val(),'sort':$('#Sort').val(),'sort_type':$('#Sort_type').val() }),
+                    contentType:'application/json',
+                    dataType: "html",
+                    success: function (result) {
+                        $('#reloadPartial').html(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                    }
+                });
+            });
+        };
+    </script>
+}
+

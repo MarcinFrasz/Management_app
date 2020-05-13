@@ -1,0 +1,129 @@
+﻿@model  Management_application.Models.File_View
+@if (Model.Check_student_teacher == "teacher")
+{<h3>Folder:@Model.Directory_name</h3>
+<div style="overflow:scroll; height:400px;">
+    @for (int i = 0; i < Model.Materials_list.Count; i++)
+    {
+        using (Html.BeginForm("TeacherFileView", "ManagementApp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            Model.File_name = Model.Materials_list[i];
+            @Html.HiddenFor(m => m.Folder_name)
+            @Html.HiddenFor(m => m.File_name)
+            @Html.HiddenFor(m => m.Directory_name)
+            for (int j = 0; j < Model.Directory_list.Count; j++)
+            {
+                @Html.HiddenFor(m => m.Directory_list[j])
+            }
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tr class="active">
+                    @Model.Directory_list_timestamps[i].ToString()
+                    <td color bgcolor="#f2f2f2">@Model.Materials_list[i]</td>
+                </tr>
+            </table>
+            <input class="btn btn-primary" type="submit" name="submit" value="Pobierz" />
+            <input class="btn btn-primary" type="submit" name="submit" value="Usuń" />
+            <br />
+        }
+    }
+</div>
+
+
+
+using (Html.BeginForm("TeacherFileView", "ManagementApp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Folder_name)
+    @Html.HiddenFor(m => m.Directory_name)
+    <br />
+    <h3>Prześlij plik:</h3>
+    @Html.TextBox("file", "", new { type = "file" })
+    <br />
+    <input class="btn btn-primary" type="submit" name="submit" value="Prześlij" />
+}
+}
+else
+{
+if (Model.Check_student_teacher == "student")
+{
+    <h3>Materiały</h3>
+    for (int i = 0; i < Model.Materials_list.Count; i++)
+    {
+        Model.File_name = Model.Materials_list[i];
+        using (Html.BeginForm("StudentFileView", "ManagementApp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Folder_name)
+            @Html.HiddenFor(m => m.File_name)
+            @Html.HiddenFor(m => m.Materials_list[i])
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tr class="active">
+                    <td> @Model.Materials_list[i] </td>
+
+                </tr>
+            </table>
+            <input class="btn btn-primary" type="submit" name="submit" value="Pobierz" />
+        }
+    }
+    <h3>Moje pliki</h3>
+    for (int i = 0; i < Model.Student_files_list.Count; i++)
+    {
+        Model.File_name = Model.Student_files_list[i];
+        using (Html.BeginForm("StudentFileView", "ManagementApp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Folder_name)
+            @Html.HiddenFor(m => m.File_name)
+            @Html.HiddenFor(m => m.Student_files_list[i])
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tr class="active">
+                    @Model.Directory_list_timestamps[i].ToString()
+                    <td> @Model.Student_files_list[i] </td>
+                </tr>
+            </table>
+            <input class="btn btn-primary" type="submit" name="submit" value="Pobierz " />
+
+        }
+    }
+    using (Html.BeginForm("StudentFileView", "ManagementApp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        for (int i = 0; i < Model.Materials_list.Count; i++)
+        {
+            @Html.HiddenFor(m => m.Materials_list[i])
+        }
+        for (int i = 0; i < Model.Student_files_list.Count; i++)
+        {
+            @Html.HiddenFor(m => m.Student_files_list[i])
+        }
+        @Html.HiddenFor(m => m.Folder_name)
+        <br />
+        <h3>Prześlij plik:</h3>
+        @Html.TextBox("file", "", new { type = "file" })
+        <br />
+        <input class="btn btn-primary" type="submit" name="submit" value="Prześlij" />
+    }
+}
+}
+
+@if (!string.IsNullOrEmpty(Model.ViewBagMsg))
+{
+    <script type="text/javascript">
+alert("@Model.ViewBagMsg");
+    </script>
+}

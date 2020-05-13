@@ -1,0 +1,81 @@
+﻿@model  Management_application.Models.Classes
+<link href="~/Content/CustomStyle.css" rel="stylesheet" type="text/css" />
+<div class="row">
+    <div class="column">
+        @{
+            ViewBag.Title = "AddClassView";
+            string current_year = DateTime.Now.Year.ToString();
+            int year = Int32.Parse(current_year);
+            string year_beafore = (year - 1).ToString();
+            string year_after = (year + 1).ToString();
+
+            var years_list = new List<string>();
+            years_list.Add(year_beafore + "/" + current_year);
+            years_list.Add(current_year + "/" + year_after);
+
+            var semester_list = new List<string>();
+            semester_list.Add("Letni");
+            semester_list.Add("Zimowy");
+            List<String> classtype_list = new List<string>();
+            classtype_list = ViewBag.classtype_dropdown;
+        }
+
+        <h2>Stwórz zajęcia:</h2>
+
+
+        @using (Html.BeginForm("AddClassView", "ManagementApp", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td>Podaj nazwę:</td>
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <td>@Html.TextAreaFor(m => m.Name, new { @class = "form-control", placeholder = "", required = "required" })</td>
+                </tr>
+                <tr>
+                    <td>Wybierz typ:</td>
+                    <td>
+                        @Html.DropDownListFor(m => m.Type, new SelectList(classtype_list), "--Wybierz--", new { @class = "form-control", required = "required" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>Wybierz rok:</td>
+                    <td>
+                        @Html.DropDownListFor(m => m.Year, new SelectList(years_list), "--Wybierz--", new { @class = "form-control", required = "required" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>Wybierz semestr:</td>
+                    <td>@Html.DropDownListFor(m => m.Semester, new SelectList(semester_list), "--Wybierz--", new { @class = "form-control", required = "required" })</td>
+
+                </tr>
+                <tr>
+                    <td align="center"><input class="btn btn-primary" type="submit" name="submit" value="Dodaj" /></td>
+                </tr>
+            </table>
+        }
+        <br />
+    </div>
+
+    <div class="column">
+        <h2>Istniejące zajęcia:</h2>
+        <div id="" style="overflow:scroll; height:600px;">
+            @foreach (var item in Model.Classes_list)
+            {
+                using (Html.BeginForm("AddClassView", "ManagementApp", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Partial("~/Views/Shared/partialClassesView.cshtml", item);
+                    <input class="btn btn-primary" type="submit" name="submit" value="Zarządzaj" />
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ViewBagMsg))
+{
+    <script type="text/javascript">
+alert("@Model.ViewBagMsg");
+    </script>
+} 
